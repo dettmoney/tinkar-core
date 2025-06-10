@@ -15,12 +15,16 @@
  */
 package dev.ikm.tinkar.common.id;
 
+import dev.ikm.tinkar.common.id.impl.IntId0List;
+import dev.ikm.tinkar.common.id.impl.IntId0Set;
 import dev.ikm.tinkar.common.id.impl.IntIdListArray;
 import dev.ikm.tinkar.common.id.impl.IntIdSetArray;
+import dev.ikm.tinkar.common.util.time.Stopwatch;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -28,10 +32,103 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 public class IntIdsTest {
 
     @Test
+    public void performanceTest10_1() {
+        Random random = new Random();
+        int number1 = random.nextInt(-2000000, 0);
+        int number2 = random.nextInt(-2000000, 0);
+        int number3 = random.nextInt(-2000000, 0);
+        int number4 = random.nextInt(-2000000, 0);
+        int number5 = random.nextInt(-2000000, 0);
+        int number6 = random.nextInt(-2000000, 0);
+        int number7 = random.nextInt(-2000000, 0);
+        int number8 = random.nextInt(-2000000, 0);
+        int number9 = random.nextInt(-2000000, 0);
+        int number10 = random.nextInt(-2000000, 0);
+        Stopwatch stopwatch = new Stopwatch();
+        for (int i=0; i<1000000;i++) {
+            IntIdSet set1 = IntIdSetFactoryEnum.INSTANCE.of(
+                    number1,
+                    number2,
+                    number3,
+                    number4,
+                    number5,
+                    number6,
+                    number7,
+                    number8,
+                    number9,
+                    number10
+            );
+            IntIdSet set2 = IntIdSetFactoryEnum.INSTANCE.of(
+                    number1,
+                    number2,
+                    number3,
+                    number4,
+                    number5,
+                    number6,
+                    number7,
+                    number8,
+                    number9,
+                    number10
+            );
+            boolean eq = set1.equals(set2);
+        }
+        System.out.println("***JTD: performance10_1 duration " + stopwatch.durationString());
+    }
+
+    @Test
+    public void performanceTest10_2() {
+        Random random = new Random();
+        int number1 = random.nextInt(-2000000, 0);
+        int number2 = random.nextInt(-2000000, 0);
+        int number3 = random.nextInt(-2000000, 0);
+        int number4 = random.nextInt(-2000000, 0);
+        int number5 = random.nextInt(-2000000, 0);
+        int number6 = random.nextInt(-2000000, 0);
+        int number7 = random.nextInt(-2000000, 0);
+        int number8 = random.nextInt(-2000000, 0);
+        int number9 = random.nextInt(-2000000, 0);
+        int number10 = random.nextInt(-2000000, 0);
+        Stopwatch stopwatch = new Stopwatch();
+        for (int i=0; i<1000000;i++) {
+            IntIdSet set1 = IntIdSetFactoryEnum.INSTANCE.of(
+                    number1,
+                    number2,
+                    number3,
+                    number4,
+                    number5,
+                    number6,
+                    number7,
+                    number7,
+                    number7,
+                    number7
+            );
+            IntIdSet set2 = IntIdSetFactoryEnum.INSTANCE.of(
+                    number1,
+                    number2,
+                    number3,
+                    number4,
+                    number5,
+                    number6,
+                    number7,
+                    number7,
+                    number7,
+                    number7
+            );
+            boolean eq = set1.equals(set2);
+        }
+        System.out.println("***JTD: performance10_2 duration " + stopwatch.durationString());
+    }
+
+    @Test
     public void intIdOrderedSetTests() {
+        // Size 0
+        IntIdSet set1 = IntId0Set.INSTANCE;
+        IntIdSet set2 = IntId0Set.INSTANCE;
+        assertEquals(set1, set2);
+
         // Size 1
-        IntIdSet set1 = IntIdSetFactoryEnum.INSTANCE.of(0);
-        IntIdSet set2 = IntIdSetFactoryEnum.INSTANCE.of(1);
+        set1 = IntIdSetFactoryEnum.INSTANCE.of(0);
+        set2 = IntIdSetFactoryEnum.INSTANCE.of(1);
         assertNotEquals(set1, set2);
         assertNotEquals(set1.toArray()[0], set2.toArray()[0]);
 
@@ -55,6 +152,12 @@ public class IntIdsTest {
         set2 = IntIdSetFactoryEnum.INSTANCE.of(0, 3);
         assertNotEquals(set1, set2);
         assertNotEquals(set1.toArray()[0], set2.toArray()[0]);
+
+        set2 = IntIdSetFactoryEnum.INSTANCE.of(1, 1, 1);
+        assertNotEquals(set1, set2);
+        IntIdSet set3 = IntIdSetFactoryEnum.INSTANCE.of(1, 2, 0);
+        assertEquals(set1, set3);
+        System.out.println("***JTD: hashcodes for set1 " + set1.hashCode() + ", set2 " + set2.hashCode() + ", set3 " + set3.hashCode());
 
         // Ensure order is preserved
         set1 = IntIdSetFactoryEnum.INSTANCE.of(1, 0, 2, 1);
@@ -81,9 +184,14 @@ public class IntIdsTest {
 
     @Test
     public void intIdListTests() {
+        // Size 0
+        IntIdList list1 = IntId0List.INSTANCE;
+        IntIdList list2 = IntId0List.INSTANCE;
+        assertEquals(list1, list2);
+
         // Size 1
-        IntIdList list1 = IntIdListFactoryEnum.INSTANCE.of(0);
-        IntIdList list2 = IntIdListFactoryEnum.INSTANCE.of(1);
+        list1 = IntIdListFactoryEnum.INSTANCE.of(0);
+        list2 = IntIdListFactoryEnum.INSTANCE.of(1);
         assertNotEquals(list1, list2);
         assertNotEquals(list1.toArray()[0], list2.toArray()[0]);
 
